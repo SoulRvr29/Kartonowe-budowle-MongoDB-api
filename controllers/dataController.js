@@ -8,7 +8,7 @@ const { text } = require("body-parser");
 // @access Private
 const getData = asyncHandler(async (req, res) => {
   const data = await Data.find();
-  console.log(data);
+  // console.log(data);
   res.status(200).json(data);
 });
 

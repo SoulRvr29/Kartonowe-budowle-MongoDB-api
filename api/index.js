@@ -16,13 +16,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/models", require("../routes/dataRoutes"));
+app.use("/api/comments", require("../routes/commentRoutes"));
 
 app.get("/", (req, res) => {
   res.send(`
   <b>Kartonowe budowle api</b><br><br>
   Database: MongoDB <br>
-  Author: Paweł Chudecki <br>
-  Route: /api/models
+  Author: Paweł Chudecki <br><br>
+  Routes: <br>
+  /api/models <br>
+  /api/comments 
   `);
 });
 
