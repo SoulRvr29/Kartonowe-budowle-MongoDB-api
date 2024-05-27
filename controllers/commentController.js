@@ -57,8 +57,6 @@ const deleteComment = asyncHandler(async (req, res) => {
     throw new Error("Comment not found");
   }
 
-  await comment.deleteOne();
-
   res.status(200).json({ id: req.params.id });
 });
 
