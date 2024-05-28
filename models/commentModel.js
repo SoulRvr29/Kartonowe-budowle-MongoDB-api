@@ -8,7 +8,7 @@ const commentSchema = new mongoose.Schema(
         user: { type: String, required: true },
         comment: { type: String, required: true },
         likes: { type: Number, default: 0 },
-        createdAt: { type: Date, default: Date.now() + 2 * 60 * 60 * 1000 },
+        createdAt: { type: Date },
       },
     ],
   },
