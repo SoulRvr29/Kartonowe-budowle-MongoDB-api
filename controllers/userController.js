@@ -1,7 +1,15 @@
 const asyncHandler = require("express-async-handler");
-
 const User = require("../models/userModel");
-const { text } = require("body-parser");
+const argon2 = require("argon2");
+
+const hashPassword = async (password) => {
+  try {
+    const hashedPassword = await argon2.hash(password);
+    return hashedPassword;
+  } catch (err) {
+    throw new Error("Password hashing failed");
+  }
+};
 
 // @desc  Get user
 // @route GET /api/users
@@ -18,8 +26,24 @@ const setUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please add all data");
   }
-  const user = await User.create(req.body);
-  console.log(user);
+  const loginExist = await User.findOne({
+    login: req.body.login,
+  });
+  if (loginExist) {
+    res.status(400);
+    throw new Error("Login already exist");
+  }
+
+  const emailExist = await User.findOne({
+    email: req.body.email,
+  });
+  if (emailExist) {
+    res.status(400);
+    throw new Error("Email already exist");
+  }
+
+  const hashedPass = await hashPassword(req.body.password);
+  const user = await User.create({ ...req.body, password: hashedPass });
 
   res.status(200).json(user);
 });
@@ -32,9 +56,21 @@ const updateUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("User not found");
   }
-  const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
+  let updatedUser = {};
+  if (req.body.password) {
+    const hashedPass = await hashPassword(req.body.password);
+    updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body, password: hashedPass },
+      {
+        new: true,
+      }
+    );
+  } else {
+    updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+  }
 
   res.status(200).json(updatedUser);
 });
