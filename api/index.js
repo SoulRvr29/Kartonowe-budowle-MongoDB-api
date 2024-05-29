@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/models", require("../routes/dataRoutes"));
 app.use("/api/comments", require("../routes/commentRoutes"));
+app.use("/api/users", require("../routes/userRoutes"));
 
 app.get("/", (req, res) => {
   res.send(`
@@ -25,7 +26,7 @@ app.get("/", (req, res) => {
   Author: Paweł Chudecki <br><br>
   Routes: <br>
   /api/models <br>
-  /api/comments 
+  /api/comments <br>
   `);
 });
 
