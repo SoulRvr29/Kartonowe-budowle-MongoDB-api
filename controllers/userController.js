@@ -2,15 +2,6 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const argon2 = require("argon2");
 
-const hashPassword = async (password) => {
-  try {
-    const hashedPassword = await argon2.hash(password);
-    return hashedPassword;
-  } catch (err) {
-    throw new Error("Password hashing failed");
-  }
-};
-
 // @desc  Get user
 // @route GET /api/users
 const getUser = asyncHandler(async (req, res) => {
@@ -90,9 +81,43 @@ const deleteUser = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id });
 });
 
+///// PASSWORD VERIFICATION /////
+const hashPassword = async (password) => {
+  try {
+    const hashedPassword = await argon2.hash(password);
+    return hashedPassword;
+  } catch (err) {
+    throw new Error("Password hashing failed");
+  }
+};
+
+const verifyPassword = async (hash, password) => {
+  try {
+    return await argon2.verify(hash, password);
+  } catch (err) {
+    throw new Error("Password verify failed");
+  }
+};
+
+// @desc  Get verify
+// @route GET /api/users/verify
+const loginVerify = asyncHandler(async (req, res) => {
+  const data = await User.find({ login: req.body.login });
+  let verify = false;
+  if (data.length) {
+    verify = await verifyPassword(data[0].password, req.body.password);
+  } else {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  res.status(200).json(verify);
+});
+
 module.exports = {
   getUser,
   setUser,
   updateUser,
   deleteUser,
+  loginVerify,
 };
