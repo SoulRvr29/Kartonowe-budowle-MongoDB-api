@@ -111,7 +111,12 @@ const loginVerify = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  res.status(200).json(verify);
+  res.status(200).json({
+    login: data[0].login,
+    email: data[0].email,
+    password: req.body.password,
+    verify: verify,
+  });
 });
 
 module.exports = {

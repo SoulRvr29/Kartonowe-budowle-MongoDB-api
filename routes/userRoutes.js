@@ -10,6 +10,6 @@ const {
 
 router.route("/").get(getUser).post(setUser);
 router.route("/:id").put(updateUser).delete(deleteUser);
-router.route("/verify").get(loginVerify);
+router.route("/verify").post(loginVerify);
 
 module.exports = router;
