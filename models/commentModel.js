@@ -5,10 +5,11 @@ const commentSchema = new mongoose.Schema(
     section: { type: String, required: true },
     comments: [
       {
-        user: { type: String, required: true },
+        login: { type: String, required: true },
         comment: { type: String, required: true },
         likes: { type: Number, default: 0 },
         createdAt: { type: Date },
+        admin: { type: Boolean },
       },
     ],
   },
