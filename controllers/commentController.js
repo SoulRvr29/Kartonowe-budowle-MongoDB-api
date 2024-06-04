@@ -7,7 +7,6 @@ const { text } = require("body-parser");
 // @route GET /api/comments
 const getComment = asyncHandler(async (req, res) => {
   const comment = await Comment.find();
-  console.log(req.ip);
   res.status(200).json(comment);
 });
 
@@ -48,20 +47,17 @@ const likeComment = asyncHandler(async (req, res) => {
 // @desc  Update comment
 // @route PUT /api/comments
 const updateComment = asyncHandler(async (req, res) => {
-  const comment = await Comment.findById(req.params.id);
+  const section = await Comment.findById(req.params.id);
   // console.log(req);
 
-  if (!comment) {
+  if (!section) {
     res.status(400);
     throw new Error("Comment not found");
   }
-  const updatedComment = await Comment.findByIdAndUpdate(
-    req.params.id,
-    { $push: { comments: req.body } },
-    { new: true }
-  );
+  section.comments[req.body.index].comment = req.body.comment;
+  await section.save();
 
-  res.status(200).json(updatedComment);
+  res.status(200).json(section);
 });
 
 // @desc  Delete comment
