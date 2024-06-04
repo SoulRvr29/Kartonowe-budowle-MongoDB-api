@@ -9,7 +9,9 @@ const {
 } = require("../controllers/commentController");
 
 router.route("/:sectionId/like").put(likeComment);
-router.route("/").get(getComment).post(setComment);
-router.route("/:id").put(updateComment).delete(deleteComment);
+router.route("/").get(getComment);
+router.route("/:id").put(setComment);
+router.route("/:id/update").put(updateComment);
+router.route("/:id").delete(deleteComment);
 
 module.exports = router;

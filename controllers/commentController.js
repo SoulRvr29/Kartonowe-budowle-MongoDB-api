@@ -10,17 +10,22 @@ const getComment = asyncHandler(async (req, res) => {
   res.status(200).json(comment);
 });
 
-// @desc  Post comment
-// @route POST /api/comments
+// @desc  Put comment
+// @route PUT /api/comments
 const setComment = asyncHandler(async (req, res) => {
-  // if (!req.body.title) {
-  //   res.status(400);
-  //   throw new Error("Please add a title");
-  // }
-  const comment = await Comment.create(req.body);
-  console.log(comment);
+  const section = await Comment.findById(req.params.id);
 
-  res.status(200).json(comment);
+  if (!section) {
+    res.status(400);
+    throw new Error("Section not found");
+  }
+  const updatedComment = await Comment.findByIdAndUpdate(
+    req.params.id,
+    { $push: { comments: req.body } },
+    { new: true }
+  );
+
+  res.status(200).json(updatedComment);
 });
 
 // @desc  Like comment
