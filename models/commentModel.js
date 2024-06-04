@@ -7,7 +7,10 @@ const commentSchema = new mongoose.Schema(
       {
         login: { type: String, required: true },
         comment: { type: String, required: true },
-        likes: { type: Number, default: 0 },
+        likes: {
+          quantity: { type: Number, default: 0 },
+          users: [{ type: String }],
+        },
         createdAt: { type: Date },
         admin: { type: Boolean },
       },

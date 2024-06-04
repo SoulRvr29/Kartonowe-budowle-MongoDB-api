@@ -5,16 +5,14 @@ const { text } = require("body-parser");
 
 // @desc  Get comment
 // @route GET /api/comments
-// @access Private
 const getComment = asyncHandler(async (req, res) => {
   const comment = await Comment.find();
-  // console.log(comment);
+  console.log(req.ip);
   res.status(200).json(comment);
 });
 
 // @desc  Post comment
 // @route POST /api/comments
-// @access Private
 const setComment = asyncHandler(async (req, res) => {
   // if (!req.body.title) {
   //   res.status(400);
@@ -26,9 +24,29 @@ const setComment = asyncHandler(async (req, res) => {
   res.status(200).json(comment);
 });
 
+// @desc  Like comment
+// @route PUT /api/comments/:sectionId/like/:commentId
+const likeComment = asyncHandler(async (req, res) => {
+  const section = await Comment.findById(req.params.sectionId);
+
+  if (!section) {
+    res.status(400);
+    throw new Error("Section not found");
+  }
+
+  if (!section.comments[req.body.index].likes.users.includes(req.body.user)) {
+    section.comments[req.body.index].likes.quantity += 1;
+  }
+  if (!section.comments[req.body.index].likes.users.includes(req.body.user)) {
+    section.comments[req.body.index].likes.users.push(req.body.user);
+  }
+  await section.save();
+
+  res.status(200).json(section);
+});
+
 // @desc  Update comment
 // @route PUT /api/comments
-// @access Private
 const updateComment = asyncHandler(async (req, res) => {
   const comment = await Comment.findById(req.params.id);
   // console.log(req);
@@ -48,7 +66,6 @@ const updateComment = asyncHandler(async (req, res) => {
 
 // @desc  Delete comment
 // @route DELETE /api/comments
-// @access Private
 const deleteComment = asyncHandler(async (req, res) => {
   const comment = await Comment.findByIdAndUpdate(
     req.params.id,
@@ -69,4 +86,5 @@ module.exports = {
   setComment,
   updateComment,
   deleteComment,
+  likeComment,
 };
