@@ -5,7 +5,7 @@ const {
   setData,
   updateData,
   deleteData,
-} = require("../controllers/dataController");
+} = require("../controllers/infoController");
 
 router.route("/").get(getData).post(setData);
 router.route("/:id").put(updateData).delete(deleteData);

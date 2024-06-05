@@ -12,6 +12,7 @@ const commentSchema = new mongoose.Schema(
           users: [{ type: String }],
         },
         createdAt: { type: Date },
+        updatedAt: { type: Date },
         admin: { type: Boolean },
       },
     ],

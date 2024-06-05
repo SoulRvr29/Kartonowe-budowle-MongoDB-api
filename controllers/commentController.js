@@ -11,7 +11,7 @@ const getComment = asyncHandler(async (req, res) => {
 });
 
 // @desc  Put comment
-// @route PUT /api/comments
+// @route PUT /api/comments/:id
 const setComment = asyncHandler(async (req, res) => {
   const section = await Comment.findById(req.params.id);
 
@@ -50,7 +50,7 @@ const likeComment = asyncHandler(async (req, res) => {
 });
 
 // @desc  Update comment
-// @route PUT /api/comments
+// @route PUT /api/comments/:id/update
 const updateComment = asyncHandler(async (req, res) => {
   const section = await Comment.findById(req.params.id);
   // console.log(req);
@@ -60,13 +60,16 @@ const updateComment = asyncHandler(async (req, res) => {
     throw new Error("Comment not found");
   }
   section.comments[req.body.index].comment = req.body.comment;
+  section.comments[req.body.index].updatedAt = new Date(
+    new Date().getTime() + 7200000
+  );
   await section.save();
 
   res.status(200).json(section);
 });
 
 // @desc  Delete comment
-// @route DELETE /api/comments
+// @route DELETE /api/comments/:id
 const deleteComment = asyncHandler(async (req, res) => {
   const comment = await Comment.findByIdAndUpdate(
     req.params.id,

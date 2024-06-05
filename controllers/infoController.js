@@ -1,13 +1,13 @@
 const asyncHandler = require("express-async-handler");
 
-const Data = require("../models/dataModel");
+const Info = require("../models/infoModel");
 const { text } = require("body-parser");
 
 // @desc  Get data
 // @route GET /api/models
 // @access Private
 const getData = asyncHandler(async (req, res) => {
-  const data = await Data.find();
+  const data = await Info.find();
   // console.log(data);
   res.status(200).json(data);
 });
@@ -20,7 +20,7 @@ const setData = asyncHandler(async (req, res) => {
   //   res.status(400);
   //   throw new Error("Please add a title");
   // }
-  const data = await Data.create(req.body);
+  const data = await Info.create(req.body);
 
   res.status(200).json(data);
 });
@@ -29,13 +29,13 @@ const setData = asyncHandler(async (req, res) => {
 // @route PUT /api/models
 // @access Private
 const updateData = asyncHandler(async (req, res) => {
-  const data = await Data.findById(req.params.id);
+  const data = await Info.findById(req.params.id);
 
   if (!data) {
     res.status(400);
     throw new Error("Data not found");
   }
-  const updatedData = await Data.findByIdAndUpdate(req.params.id, req.body, {
+  const updatedData = await Info.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
 
@@ -46,7 +46,7 @@ const updateData = asyncHandler(async (req, res) => {
 // @route DELETE /api/models
 // @access Private
 const deleteData = asyncHandler(async (req, res) => {
-  const data = await Data.findById(req.params.id);
+  const data = await Info.findById(req.params.id);
 
   if (!data) {
     res.status(400);

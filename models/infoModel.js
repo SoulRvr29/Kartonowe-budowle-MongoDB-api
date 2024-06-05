@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { type } = require("os");
 
-const dataSchema = mongoose.Schema(
+const infoSchema = new mongoose.Schema(
   {
     title: { type: String },
     entries: { type: Object },
@@ -12,4 +12,4 @@ const dataSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("models", dataSchema);
+module.exports = mongoose.model("Info", infoSchema);

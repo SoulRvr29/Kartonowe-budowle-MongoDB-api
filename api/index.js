@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/api/models", require("../routes/dataRoutes"));
+app.use("/api/info", require("../routes/infoRoutes"));
 app.use("/api/comments", require("../routes/commentRoutes"));
 app.use("/api/users", require("../routes/userRoutes"));
 
@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
   Database: MongoDB <br>
   Author: Paweł Chudecki <br><br>
   Routes: <br>
-  /api/models <br>
+  /api/info <br>
   /api/comments <br>
   `);
 });
