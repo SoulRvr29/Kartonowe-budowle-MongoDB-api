@@ -1,7 +1,8 @@
 const asyncHandler = require("express-async-handler");
-
 const Comment = require("../models/commentModel");
 const { text } = require("body-parser");
+
+const nodemailer = require("nodemailer");
 
 // @desc  Get comment
 // @route GET /api/comments
@@ -26,6 +27,36 @@ const setComment = asyncHandler(async (req, res) => {
   );
 
   res.status(200).json(updatedComment);
+
+  const transporter = nodemailer.createTransport({
+    host: "poczta.interia.pl",
+    port: 465, // or 465 for SSL/TLS
+    secure: true, // use true for 465
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  console.log("Transporter configured with email:", process.env.EMAIL);
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: process.env.EMAIL,
+    subject: `Nowy komentarz dla modelu: ${req.body.modelName}`,
+    html: `Komentarz użytkownika: <b>${req.body.login}</b><hr/>${req.body.comment}
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+
+  console.log("Email sent successfully");
+  return new Response(JSON.stringify({ status: "success" }), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 });
 
 // @desc  Like comment
