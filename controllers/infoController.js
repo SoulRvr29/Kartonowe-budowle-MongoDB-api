@@ -4,17 +4,14 @@ const Info = require("../models/infoModel");
 const { text } = require("body-parser");
 
 // @desc  Get data
-// @route GET /api/models
-// @access Private
+// @route GET /api/info
 const getData = asyncHandler(async (req, res) => {
   const data = await Info.find();
-  // console.log(data);
   res.status(200).json(data);
 });
 
-// @desc  Set data
-// @route POST /api/models
-// @access Private
+// @desc  Post data
+// @route POST /api/info
 const setData = asyncHandler(async (req, res) => {
   // if (!req.body.title) {
   //   res.status(400);
@@ -26,8 +23,7 @@ const setData = asyncHandler(async (req, res) => {
 });
 
 // @desc  Update data
-// @route PUT /api/models
-// @access Private
+// @route PUT /api/info
 const updateData = asyncHandler(async (req, res) => {
   const data = await Info.findById(req.params.id);
 
@@ -43,8 +39,7 @@ const updateData = asyncHandler(async (req, res) => {
 });
 
 // @desc  Delete data
-// @route DELETE /api/models
-// @access Private
+// @route DELETE /api/info
 const deleteData = asyncHandler(async (req, res) => {
   const data = await Info.findById(req.params.id);
 
