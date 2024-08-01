@@ -3,9 +3,7 @@ const { type } = require("os");
 
 const infoSchema = new mongoose.Schema(
   {
-    title: { type: String },
-    entries: { type: Object },
-    list: { type: Array },
+    content: { type: String },
   },
   {
     timestamps: true,

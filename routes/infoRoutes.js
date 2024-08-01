@@ -7,7 +7,7 @@ const {
   deleteData,
 } = require("../controllers/infoController");
 
-router.route("/").get(getData).post(setData);
-router.route("/:id").put(updateData).delete(deleteData);
+router.route("/").get(getData).post(setData).put(updateData);
+router.route("/:id").delete(deleteData);
 
 module.exports = router;

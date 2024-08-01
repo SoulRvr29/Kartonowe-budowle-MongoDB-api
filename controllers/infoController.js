@@ -1,7 +1,13 @@
 const asyncHandler = require("express-async-handler");
 
 const Info = require("../models/infoModel");
-const { text } = require("body-parser");
+const bodyParser = require("body-parser");
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+app.use(bodyParser.json());
+app.use(cors());
 
 // @desc  Get data
 // @route GET /api/info
@@ -13,20 +19,27 @@ const getData = asyncHandler(async (req, res) => {
 // @desc  Post data
 // @route POST /api/info
 const setData = asyncHandler(async (req, res) => {
-  // if (!req.body.title) {
-  //   res.status(400);
-  //   throw new Error("Please add a title");
-  // }
-  const data = await Info.create(req.body);
+  const { content } = req.body;
 
-  res.status(200).json(data);
+  try {
+    let data = await Info.findOne();
+    if (data) {
+      data.content = content;
+    } else {
+      data = new Info({ content });
+    }
+    await data.save();
+    res.status(200).send("Markdown saved successfully");
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 // @desc  Update data
 // @route PUT /api/info
 const updateData = asyncHandler(async (req, res) => {
   const data = await Info.findById(req.params.id);
-
+  console.log(req.body);
   if (!data) {
     res.status(400);
     throw new Error("Data not found");
