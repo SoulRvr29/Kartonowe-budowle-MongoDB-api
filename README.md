@@ -1,1 +1,1 @@
-API for kartonowebudowle.pl site.
+API for modelcraft.pl site.
