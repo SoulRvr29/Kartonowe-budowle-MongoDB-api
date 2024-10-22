@@ -43,7 +43,7 @@ const setComment = asyncHandler(async (req, res) => {
   const mailOptions = {
     from: process.env.EMAIL,
     to: process.env.EMAIL,
-    subject: `Nowy komentarz dla modelu: ${req.body.modelName}`,
+    subject: `Nowy komentarz dla sekcji: ${req.body.modelName}`,
     html: `Komentarz użytkownika: <b>${req.body.login}</b><hr/>${req.body.comment}
     `,
   };
