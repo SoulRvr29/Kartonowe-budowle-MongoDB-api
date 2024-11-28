@@ -15,6 +15,7 @@ const getComment = asyncHandler(async (req, res) => {
 // @route PUT /api/comments/:id
 const setComment = asyncHandler(async (req, res) => {
   const section = await Comment.findById(req.params.id);
+  console.log(req.body);
 
   if (!section) {
     res.status(400);
@@ -38,25 +39,22 @@ const setComment = asyncHandler(async (req, res) => {
     },
   });
 
-  console.log("Transporter configured with email:", process.env.EMAIL);
-
   const mailOptions = {
     from: process.env.EMAIL,
     to: process.env.EMAIL,
     subject: `Nowy komentarz dla modelu: ${req.body.modelName}`,
-    html: `Komentarz użytkownika: <b>${req.body.login}</b><hr/>${req.body.comment}
-    `,
+    html: `Komentarz użytkownika: <b>${req.body.login}</b><hr/>${req.body.comment}`,
   };
 
-  await transporter.sendMail(mailOptions);
-
-  console.log("Email sent successfully");
-  return new Response(JSON.stringify({ status: "success" }), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  if (req.body.admin != true) {
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log("Email sent successfully");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      res.status(500).json({ message: "Email could not be sent" });
+    }
+  }
 });
 
 // @desc  Like comment
@@ -84,7 +82,6 @@ const likeComment = asyncHandler(async (req, res) => {
 // @route PUT /api/comments/:id/update
 const updateComment = asyncHandler(async (req, res) => {
   const section = await Comment.findById(req.params.id);
-  // console.log(req);
 
   if (!section) {
     res.status(400);

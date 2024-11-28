@@ -6,7 +6,7 @@ const argon2 = require("argon2");
 // @route GET /api/users
 const getUser = asyncHandler(async (req, res) => {
   const user = await User.find();
-  console.log(user);
+  // console.log(user);
   res.status(200).json(user);
 });
 
