@@ -28,28 +28,30 @@ const setComment = asyncHandler(async (req, res) => {
 
   res.status(200).json(updatedComment);
 
-  const transporter = nodemailer.createTransport({
-    host: "poczta.interia.pl",
-    port: 465, // or 465 for SSL/TLS
-    secure: true, // use true for 465
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
+  if (!req.body.admin) {
+    const transporter = nodemailer.createTransport({
+      host: "poczta.interia.pl",
+      port: 465, // or 465 for SSL/TLS
+      secure: true, // use true for 465
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
 
-  console.log("Transporter configured with email:", process.env.EMAIL);
+    console.log("Transporter configured with email:", process.env.EMAIL);
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: process.env.EMAIL,
-    subject: `Nowy komentarz dla sekcji: ${req.body.modelName}`,
-    html: `Komentarz użytkownika: <b>${req.body.login}</b><hr/>${req.body.comment}`,
-  };
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: process.env.EMAIL,
+      subject: `Nowy komentarz dla sekcji: ${req.body.modelName}`,
+      html: `Komentarz użytkownika: <b>${req.body.login}</b><hr/>${req.body.comment}`,
+    };
 
-  await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
 
-  console.log("Email sent successfully");
+    console.log("Email sent successfully");
+  }
   return new Response(JSON.stringify({ status: "success" }), {
     status: 200,
     headers: {
