@@ -39,7 +39,7 @@ const setData = asyncHandler(async (req, res) => {
 // @route PUT /api/info
 const updateData = asyncHandler(async (req, res) => {
   const data = await Info.findById(req.params.id);
-  console.log(req.body);
+  // console.log(req.body);
   if (!data) {
     res.status(400);
     throw new Error("Data not found");

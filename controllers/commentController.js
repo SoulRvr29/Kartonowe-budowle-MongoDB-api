@@ -26,38 +26,37 @@ const setComment = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  res.status(200).json(updatedComment);
+  if (!updatedComment) {
+    res.status(400);
+    throw new Error("Section not found");
+  }
 
   if (!req.body.admin) {
-    const transporter = nodemailer.createTransport({
-      host: "poczta.interia.pl",
-      port: 465, // or 465 for SSL/TLS
-      secure: true, // use true for 465
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
+    try {
+      const transporter = nodemailer.createTransport({
+        host: "poczta.interia.pl",
+        port: 465, // or 465 for SSL/TLS
+        secure: true, // use true for 465
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
 
-    console.log("Transporter configured with email:", process.env.EMAIL);
+      const mailOptions = {
+        from: process.env.EMAIL,
+        to: process.env.EMAIL,
+        subject: `Nowy komentarz dla sekcji: ${req.body.modelName}`,
+        html: `Komentarz użytkownika: <b>${req.body.login}</b><hr/>${req.body.comment}`,
+      };
 
-    const mailOptions = {
-      from: process.env.EMAIL,
-      to: process.env.EMAIL,
-      subject: `Nowy komentarz dla sekcji: ${req.body.modelName}`,
-      html: `Komentarz użytkownika: <b>${req.body.login}</b><hr/>${req.body.comment}`,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    console.log("Email sent successfully");
+      await transporter.sendMail(mailOptions);
+      console.log("Email sent successfully");
+    } catch (error) {
+      console.error("Error sending email:", error.message);
+    }
   }
-  return new Response(JSON.stringify({ status: "success" }), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  res.status(200).json(updatedComment);
 });
 
 // @desc  Like comment
