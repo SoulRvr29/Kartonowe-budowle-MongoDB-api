@@ -14,10 +14,11 @@ const commentSchema = new mongoose.Schema(
         createdAt: { type: Date },
         updatedAt: { type: Date },
         admin: { type: Boolean },
+        picture: { type: String },
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Comment", commentSchema);

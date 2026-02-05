@@ -27,6 +27,7 @@ app.get("/", (req, res) => {
   Routes: <br>
   /api/info <br>
   /api/comments <br>
+  /api/users <br>
   `);
 });
 
