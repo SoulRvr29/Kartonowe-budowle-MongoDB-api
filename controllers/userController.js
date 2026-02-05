@@ -55,7 +55,7 @@ const updateUser = asyncHandler(async (req, res) => {
       { ...req.body, password: hashedPass },
       {
         new: true,
-      }
+      },
     );
   } else {
     updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -117,6 +117,7 @@ const loginVerify = asyncHandler(async (req, res) => {
     password: req.body.password,
     verify: verify,
     admin: data[0].admin,
+    picture: data[0].picture,
   });
 });
 
